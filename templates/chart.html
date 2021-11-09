@@ -1,0 +1,406 @@
+<style>
+    // Section: Variables
+:root {
+	--color-white: #ffffff;
+	--color-black: #0f0f0f;
+
+	--shadow-small: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+	--shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	--shadow-large: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+		0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+// Section: Bases
+html {
+	font-size: 100%;
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+	padding: 0;
+	margin: 0;
+	box-sizing: inherit;
+	list-style: none;
+	list-style-type: none;
+	text-decoration: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+body {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: var(--color-black);
+	background: var(--color-white);
+}
+
+a,
+button {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	background: none;
+	text-decoration: none;
+}
+
+img,
+video {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	object-fit: cover;
+}
+
+img {
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: crisp-edges;
+}
+
+// Section: Elements
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	max-width: 80rem;
+	min-height: 100vh;
+	width: 100%;
+	padding: 0 2rem;
+	margin: 0 auto;
+}
+
+// Section: Main
+.main {
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+	padding: 2rem 0;
+
+	.column {
+		display: grid;
+		grid-template-columns: 3fr 1fr;
+		justify-content: center;
+		align-items: stretch;
+		gap: 2rem;
+		width: 100%;
+		height: auto;
+		margin: 0 auto;
+
+		&-item {
+			width: 100%;
+			height: auto;
+			padding: 2rem 1rem;
+			border: none;
+			outline: none;
+			border-radius: 0.25rem;
+			background: var(--color-white);
+			box-shadow: var(--shadow-large);
+		}
+	}
+
+	// Responsive Media Query
+	@media only screen and(max-width: 1024px) {
+		.column {
+			display: grid;
+			grid-template-columns: 1fr;
+			justify-content: center;
+			text-align: center;
+		}
+	}
+}
+
+</style>
+
+
+
+<h1>
+    {{ data }}
+</h1>
+<main class="main">
+	<div class="container">
+		<section class="column">
+			<div class="column-item">
+				<!-- Line Chart -->
+				<canvas class="charts" id="report"></canvas>
+			</div>
+			<div class="column-item">
+				<!-- Doughnut Chart -->
+				<canvas class="charts" id="analytic"></canvas>
+			</div>
+		</section>
+	</div>
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-8216c69d01441f36c0ea791ae2d4469f0f8ff5326f00ae2d00e4bb7d20e24edb.js"></script>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js'></script>
+
+
+
+
+
+
+<script>
+
+    var zaman = JSON.parse("{{zaman|escapejs}}");
+    var mylist = {{ mylist|safe }};
+    {#alert(mylist)#}
+        {#for(i = 0; i < mylist.length; i++){#}
+        {#  console.log(mylist)#}
+        {#    };#}
+    {#var lashi = [title];#}
+    {#var anagha = [lashi];#}
+    {#alert(lashi);#}
+    {#alert(title);#}
+    {#lashi.forEach(title => alert(lashi));#}
+    {#for (let i = 0; i < title.length; i++) {#}
+    {#    alert(title[i]);#}
+    {#                }#}
+
+    {##}
+    {#alert(lashi);#}
+    // Line Chart Configuration
+// Report Chart Data
+    {#alert(anagha);#}
+const reportData = {
+	labels:mylist,
+	datasets: [
+		{
+			label: "Monthly Sales",
+			data: zaman,
+			tension: 0.3,
+			fill: true,
+			borderWidth: 2,
+			borderColor: "rgba(48, 156, 229, 1)",
+			backgroundColor: "rgba(48, 156, 229, 0.8)",
+			pointBorderColor: "rgba(48, 156, 229, 1)",
+			pointBackgroundColor: "rgba(48, 156, 229, 1)"
+		}
+	]
+};
+
+// Report Chart Plugin
+const reportPlugin = {
+	title: {
+		display: true,
+		position: "top",
+		align: "start",
+		text: "Monthly Sales Data Report",
+		color: "rgba(23, 23, 23, 1)",
+		font: {
+			family: "Roboto",
+			size: 21,
+			style: "normal",
+			weight: "bold",
+			lineHeight: 1.25
+		},
+		padding: {
+			bottom: 20
+		}
+	},
+	legend: {
+		display: true,
+		position: "top",
+		align: "center",
+		maxWidth: 20,
+		labels: {
+			font: {
+				family: "Roboto",
+				size: 13,
+				style: "normal",
+				weight: "normal",
+				lineHeight: 1.25,
+				textAlign: "center",
+				usePointStyle: false
+			}
+		}
+	},
+	tooltip: {
+		enabled: true,
+		mode: "index",
+		intersect: false,
+		position: "nearest",
+		usePointStyle: false,
+		titleFont: "Roboto",
+		titleAlign: "left",
+		titleSpacing: 3,
+		padding: 10
+	}
+};
+
+// Report Chart Option
+const reportOption = {
+	responsive: true,
+	maintainAspectRatio: true,
+	aspectRatio: 2.5,
+	plugins: reportPlugin,
+	scales: {
+		x: {
+			display: true,
+			grid: {
+				display: false
+			},
+			title: {
+				display: true,
+				text: "Month",
+				color: "rgba(23, 23, 23, 1)",
+				font: {
+					family: "Roboto",
+					size: 16,
+					weight: "bold",
+					lineHeight: 1.5
+				},
+				padding: {
+					top: 20
+				}
+			}
+		},
+		y: {
+			display: true,
+			beginAtZero: true,
+			grid: {
+				display: true
+			},
+			title: {
+				display: false,
+				text: "Value",
+				color: "rgba(23, 23, 23, 1)",
+				font: {
+					family: "Roboto",
+					size: 16,
+					weight: "bold",
+					lineHeight: 1.5
+				}
+			}
+		}
+	},
+	interaction: {
+		mode: "index",
+		intersect: false
+	},
+	animation: {
+		x: {
+			duration: 3000,
+			from: 0
+		},
+		y: {
+			duration: 1500,
+			from: 500
+		}
+	}
+};
+
+// Report Chart Config
+let reportChart = document.getElementById("report");
+const lineChart = new Chart(reportChart, {
+	type: "line",
+	data: reportData,
+	options: reportOption
+});
+
+//--------------------------------------------------------------------------
+// Doughnut Chart Configuration
+// Analytic Chart Data
+const analyticData = {
+	labels: ["Sales", "Distribute", "Return"],
+	datasets: [
+		{
+			data: [10000, 8000, 5000],
+			hoverOffset: 6,
+			backgroundColor: [
+				"rgba(255, 70, 38, 0.85)",
+				"rgba(61, 198, 79, 0.85)",
+				"rgba(155, 39, 176, 0.85)"
+			]
+		}
+	]
+};
+
+// Analytic Chart Plugin
+const analyticPlugin = {
+	title: {
+		display: true,
+		position: "top",
+		align: "start",
+		text: "Analytics Data Report",
+		color: "rgba(23, 23, 23, 1)",
+		font: {
+			family: "Roboto",
+			size: 21,
+			style: "normal",
+			weight: "bold",
+			lineHeight: 1.25
+		},
+		padding: {
+			bottom: 20
+		}
+	},
+	legend: {
+		display: true,
+		position: "bottom",
+		align: "start",
+		labels: {
+			font: {
+				family: "Roboto",
+				size: 13,
+				style: "normal",
+				weight: "normal",
+				lineHeight: 1.25,
+				textAlign: "center",
+				usePointStyle: false
+			}
+		}
+	},
+	tooltip: {
+		enabled: true,
+		mode: "index",
+		intersect: false,
+		position: "average",
+		usePointStyle: false,
+		titleFont: "Roboto",
+		titleAlign: "left",
+		titleSpacing: 3,
+		padding: 10
+	}
+};
+
+// Analytic Chart Option
+const analyticOption = {
+	responsive: false,
+	maintainAspectRatio: true,
+	plugins: analyticPlugin
+};
+
+// Analytic Chart Config
+let analyticChart = document.getElementById("analytic");
+const doughnutChart = new Chart(analyticChart, {
+	type: "doughnut",
+	data: analyticData,
+	options: analyticOption
+});
+
+</script>
+
+
+

@@ -1,0 +1,38 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.html" %}
+<body>
+<button class="btn-info" ><a href="/">home page</a></button>
+{% block content %}
+
+    <div class="col-md-4">
+    <form name="title" type="submit" method="post">
+        {% csrf_token %}
+
+        <select name="bapost2" class="form-select" aria-label="Default select example">
+
+            <option selected>Open this select menu</option>
+
+            {% for test in test %}
+                <option value="{{ test.title }}">
+
+                {{ test.title }}
+
+            {% endfor %}
+
+            </option>
+
+        </select>
+
+        <button class="btn-success pull-right" name="start" >start</button>
+
+        <button class="btn-danger pull-right" name="stop">stop</button>
+        <a href="/jobspage?sd={{ test.id }}&sp={{ test.title }}" name="title" type="submit">
+            <input type="text" class="hidden" value="job">
+      </form>
+{% endblock %}
+
+</body>
+</html>

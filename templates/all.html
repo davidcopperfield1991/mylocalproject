@@ -1,0 +1,59 @@
+{% load render_partial %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+{% include "header.html" %}
+
+    <meta charset="UTF-8">
+    <title>report</title>
+
+<body>
+<img src="{% static 'hmfe.jpg' %}" alt="" style="height: 200px ; width: 500px">
+<div>
+    <div class="col-md-4">
+            <form name="title" type="submit" method="post">
+        {% csrf_token %}
+
+        <select name="bapost2" class="form-select" aria-label="Default select example">
+
+            <option selected>Open this select menu</option>
+
+            {% for test in test %}
+                <option value="{{ test.title }}">
+
+                {{ test.title }}
+
+            {% endfor %}
+
+            </option>
+
+        </select>
+
+        <button class="btn-primary pull-right" name="report" >report</button>
+        <button class="btn-success pull-right" name="start" >start</button>
+
+        <button class="btn-danger pull-right" name="stop">stop</button>
+                <a href="/jobspage?sd={{ test.id }}&sp={{ test.title }}" name="title" type="submit"></a>
+
+      </form>
+
+    </div>
+
+</div>
+
+<div class="col-md-12">
+{#    <span class="badge">{{ object }}</span>#}
+    <h1>your study time :</h1>
+    <h2>{{ object }}</h2>
+</div>
+<div>
+    <button class="btn btn-success" ><a style="color: #fff" target="_blank"  href="today">today</a></button>
+    <button class="btn btn-success" ><a style="color: #fff"  href="mainchart">chart</a></button>
+    <button class="btn btn-success" ><a style="color: #fff"  href="detail">detail</a></button>
+</div>
+{% render_partial 'today' %}
+{% render_partial 'mainchart' %}
+{#{% render_partial 'secondchart' %}#}
+
+</body>
+</html>
